@@ -1,0 +1,45 @@
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { Header } from './components';
+import { Home, Cart } from './pages';
+import { setPizzas } from './redux/actions/pizzas';
+
+
+function App() {
+  const dispatch = useDispatch();
+  const { items } = useSelector(({ pizzas, filters }) => {
+    return {
+      items: pizzas.items,
+      sortBy: filters.sortBy,
+    }
+  }); 
+
+  console.log(items);
+
+  React.useEffect(() => {
+    axios.get('http://localhost:3000/db.json').then(({ data }) => {
+      dispatch(setPizzas(data.pizzas));
+    });
+  }, []);        
+
+  return (
+    <div className="App">
+      <div className="wrapper">
+        <Header/>
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<Home items={items}/>} />
+            <Route path="/cart" element={<Cart/>} />
+          </Routes>
+        </div>
+      </div>
+    </div>
+  ) 
+}
+
+export default App;
+
+

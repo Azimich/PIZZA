@@ -1,0 +1,22 @@
+import axios from 'axios';
+import pizz
+
+export const setLoaded = (payload) => ({
+  type: 'SET_LOADED',
+  payload,
+});
+
+export const fetchPizzas = (sortBy, category) => (dispatch) => {
+  dispatch({
+    type: 'SET_LOADED',
+    payload: false,
+  });
+
+  axios
+    .get(
+      `http://localhost:3001/pizzas?category=2`,
+    )
+    .then(({ data }) => {
+    dispatch(pizzas(data.pizzas));
+  });
+};
